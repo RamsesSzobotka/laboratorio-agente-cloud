@@ -5,8 +5,9 @@ def agregar_tarea(tareas, titulo, categoria):
     categoria = categoria.strip()
     if not categoria:
         raise ValueError("La categoría es obligatoria")
+    ultimo_id = max((t.get("id", 0) for t in tareas), default=0)
     tarea = {
-        "id": len(tareas) + 1,
+        "id": ultimo_id + 1,
         "titulo": titulo,
         "categoria": categoria,
         "completada": False,
@@ -20,6 +21,15 @@ def completar_tarea(tareas, tarea_id):
         if tarea["id"] == tarea_id:
             tarea["completada"] = True
             return tarea
+    raise ValueError("Tarea no encontrada")
+
+
+def eliminar_tarea(tareas, tarea_id):
+    for indice, tarea in enumerate(tareas):
+        if tarea["id"] == tarea_id:
+            tarea_eliminada = tarea
+            del tareas[indice]
+            return tarea_eliminada
     raise ValueError("Tarea no encontrada")
 
 
